@@ -5,7 +5,7 @@
             "name": "Launch Exporter",
             "type": "chrome",
             "request": "launch",
-            "runtimeExecutable": "${workspaceRoot}/launch.bat",
+            "runtimeExecutable": "${workspaceRoot}/scripts/launch.bat",
 			"sourceMaps": true
         }
     ]

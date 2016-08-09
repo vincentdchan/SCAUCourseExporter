@@ -11,6 +11,13 @@ var compilation = tsb.create({
 gulp.task('build', function() {
     return gulp.src("src/**/*.ts")
         .pipe(compilation())
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write({
+            addComment: false,
+            sourceRoot: "src/"
+        }))
         .pipe(gulp.dest('build/'));
+});
+
+gulp.task('watch', function() {
+    gulp.watch('src/**/*.ts', ['build']);
 });
