@@ -1,0 +1,22 @@
+{
+  "name": "scau_course_exporter",
+  "version": "1.0.0",
+  "description": "A tool to export the course timetable to the iCal file",
+  "main": "build/main_window.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChannelOne/SCAUCourseExporter.git"
+  },
+  "author": "Duzhong Chen",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ChannelOne/SCAUCourseExporter/issues"
+  },
+  "homepage": "https://github.com/ChannelOne/SCAUCourseExporter#readme",
+  "dependencies": {
+    "gulp-sourcemaps": "^1.6.0"
+  }
+}

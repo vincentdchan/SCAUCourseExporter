@@ -1,3 +1,4 @@
+"use strict";
 var BASE_CHAR;
 (function (BASE_CHAR) {
     BASE_CHAR[BASE_CHAR["HTAB"] = 9] = "HTAB";
@@ -22,10 +23,6 @@ var BASE_CHAR;
 ;
 exports.CRLF = String.fromCharCode(BASE_CHAR.CR) + String.fromCharCode(BASE_CHAR.LF);
 exports.SPACE = String.fromCharCode(BASE_CHAR.SPACE);
-var Value = (function () {
-    function Value() {
-    }
-    return Value;
-})();
+class Value {
+}
 exports.Value = Value;
-//# sourceMappingURL=util.js.map
