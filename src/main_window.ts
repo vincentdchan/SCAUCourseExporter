@@ -1,38 +1,25 @@
-import {app, BrowserWindow} from "electron"
+import {app, BrowserWindow, ipcMain} from "electron"
+import {readFile} from "fs"
+import {RawCourseData, RawCourse} from "./course"
 
-// let win;
-let intro_win;
-let win_handle;
-
-function createIntroWindow() {
-    var intro = new BrowserWindow({width: 600, height: 200});
-    intro.loadURL(`file://${__dirname}/../views/intro.html`);
-
-    intro.webContents.openDevTools();
-
-    intro.on('closed', () => {
-        win_handle = null;
-    })
-
-    win_handle = intro;
-}
+let main_wn
+let zf_hd
+let zf_lk = false
 
 function createWindow() {
-    var win = new BrowserWindow({width: 800, height: 600});
+    main_wn = new BrowserWindow({width: 800, height: 600});
 
-    win.loadURL(`http://www.baidu.com`);
+    main_wn.loadURL(`file://${__dirname}/../views/index.html`);
 
-    win.webContents.openDevTools();
+    main_wn.webContents.openDevTools();
 
-    win.on('closed', () => {
-        win_handle = null;
+    main_wn.on('closed', () => {
+        main_wn = null;
     });
 
-    win_handle = win;
 }
 
-//app.on('ready', createWindow);
-app.on('ready', createIntroWindow);
+app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -41,7 +28,63 @@ app.on('window-all-closed', () => {
 });
 
 app.on('active', () => {
-    if (win_handle = null) {
-        createIntroWindow();
+    if (main_wn = null) {
+        createWindow();
     }
+})
+
+let hook_courses_senders = []
+
+ipcMain.on('hook-courses', (evt: any, ...arg: any[]) => {
+    hook_courses_senders.push(evt.sender)
+})
+
+ipcMain.on('open-zf-link', function(evt: any, ...arg: any[]) {
+    if (zf_lk)
+        return;
+    
+    zf_lk = true
+    var link = <string>arg[0]
+
+    let child = new BrowserWindow()
+    zf_hd = child;
+
+    child.loadURL(link)
+
+    var content = child.webContents;
+
+    child.once('ready-to-show', () => {
+        child.show()
+    })
+
+    child.on('closed', () => {
+        child = null;
+        zf_lk = false
+    })
+
+    content.on('did-finish-load', () => {
+        readFile(__dirname + '/render/inject.js', 'utf-8', (err: Error, data: string) => {
+            if (!err) {
+                content.executeJavaScript(data);
+            } else
+                console.log(err);
+        })
+    })
+    
+})
+
+ipcMain.on('zf-redirect', function (evt: any, ...arg: any[]) {
+    var link = <string>arg[0];
+    zf_hd.loadURL(link);
+})
+
+ipcMain.on('zf-raw-course-data', function (evt: any, ...arg: any[]) {
+    var courses = <RawCourseData>arg[0]
+
+    for (var i=0; i < hook_courses_senders.length; ++i) {
+        hook_courses_senders[i].send('render-courses', courses)
+    }
+
+    zf_hd.close()
+    zf_hd = null
 })

@@ -1,3 +1,18 @@
+export interface RawCourse {
+    name: string;
+    quantity: number;
+    timeinfo: string;
+    teacher_name: string;
+    location?: string;
+    examinfo? :string;
+}
+
+export interface RawCourseData {
+    schoolYear: string;
+    term: string;
+    courses: Array<RawCourse>;
+}
+
 interface ISchoolYear {
     from: number;
     to: number;
