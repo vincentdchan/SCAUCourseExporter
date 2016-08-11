@@ -41,6 +41,7 @@ export class VEvent implements IVEvent {
     public organizer:   Value<string>;
     public dtstart:     Value<Date>;
     public dtend:       Value<Date>;
+    public location:    Value<string>;
     public summary:     Value<string>;
     public categories:  Value<Array<string>>;
     public _class:      Value<string>;

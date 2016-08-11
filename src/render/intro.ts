@@ -21,4 +21,13 @@ ipcRenderer.on('render-courses', (evt: any, ...arg: any[]) => {
     console.log(courses);
     var html = tmpl.render(courses);
     course_elm.innerHTML = html
+
+    var export_btn = <HTMLButtonElement>document.createElement("button")
+    course_elm.appendChild(export_btn)
+    export_btn.innerText = "Export to iCal file"
+    export_btn.addEventListener('click', (evt: MouseEvent) => {
+        evt.preventDefault()
+        ipcRenderer.send('export-courses', courses)
+        export_btn.innerText = "Exporting..."
+    })
 })

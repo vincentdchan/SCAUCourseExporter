@@ -57,3 +57,7 @@ function genFinal(init) {
     }
     return result;
 }
+function calendarGen(cal) {
+    return genFinal(iCalGen(cal));
+}
+exports.calendarGen = calendarGen;

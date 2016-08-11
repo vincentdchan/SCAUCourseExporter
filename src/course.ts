@@ -24,11 +24,6 @@ export interface ISchoolWeek {
     flag: number; // 0 for all weeks, 1 for single weeks, 2 for double weeks
 }
 
-export interface ICourseNumber {
-    from: number;
-    to: number;
-}
-
 export enum Day {
     Monday = 1, TuesDay, Wednesday,
     ThursDay, Friday, Saturday, Sunday
@@ -49,7 +44,7 @@ export class Course {
     term: number;
     teacher: Teacher;
     schoolWeeks: ISchoolWeek;
-    courseNumber: ICourseNumber;
+    courseNumbers: Array<number>;
     location: string;
     day: Day;
 };

@@ -1,7 +1,7 @@
 import {app, BrowserWindow, ipcMain} from "electron"
 import {readFile} from "fs"
-import {RawCourseData, RawCourse} from "./course"
-import {cookCourse} from "./util"
+import {RawCourseData, RawCourse, Course} from "./course"
+import {cookCourse, createCalendar} from "./util"
 
 let main_wn
 let zf_hd
@@ -74,12 +74,14 @@ ipcMain.on('open-zf-link', function(evt: any, ...arg: any[]) {
     
 })
 
-ipcMain.on('zf-redirect', function (evt: any, ...arg: any[]) {
+ipcMain.on('zf-redirect', (evt: any, ...arg: any[]) => {
+    console.assert(arg.length > 0)
     var link = <string>arg[0];
     zf_hd.loadURL(link);
 })
 
-ipcMain.on('zf-raw-course-data', function (evt: any, ...arg: any[]) {
+ipcMain.on('zf-raw-course-data', (evt: any, ...arg: any[]) => {
+    console.assert(arg.length > 0)
     var raw_courses = <RawCourseData>arg[0]
     var _cooked = cookCourse(raw_courses);
 
@@ -89,4 +91,11 @@ ipcMain.on('zf-raw-course-data', function (evt: any, ...arg: any[]) {
 
     zf_hd.close()
     zf_hd = null
+})
+
+ipcMain.on('export-courses', (evt: any, ...arg: any[]) => {
+    console.assert(arg.length >= 2)
+    var courses = <Array<Course>>arg[0]
+    var dtstart = <Date>arg[1]
+    var cal = createCalendar(courses, new Date())
 })

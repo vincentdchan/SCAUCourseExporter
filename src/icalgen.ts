@@ -61,3 +61,7 @@ function genFinal(init: Array<string>): string {
     }
     return result;
 }
+
+export function calendarGen(cal: VCalendar): string {
+    return genFinal(iCalGen(cal))
+}

@@ -54,11 +54,13 @@ electron_1.ipcMain.on('open-zf-link', function (evt, ...arg) {
         });
     });
 });
-electron_1.ipcMain.on('zf-redirect', function (evt, ...arg) {
+electron_1.ipcMain.on('zf-redirect', (evt, ...arg) => {
+    console.assert(arg.length > 0);
     var link = arg[0];
     zf_hd.loadURL(link);
 });
-electron_1.ipcMain.on('zf-raw-course-data', function (evt, ...arg) {
+electron_1.ipcMain.on('zf-raw-course-data', (evt, ...arg) => {
+    console.assert(arg.length > 0);
     var raw_courses = arg[0];
     var _cooked = util_1.cookCourse(raw_courses);
     for (var i = 0; i < hook_courses_senders.length; ++i) {
@@ -66,4 +68,10 @@ electron_1.ipcMain.on('zf-raw-course-data', function (evt, ...arg) {
     }
     zf_hd.close();
     zf_hd = null;
+});
+electron_1.ipcMain.on('export-courses', (evt, ...arg) => {
+    console.assert(arg.length >= 2);
+    var courses = arg[0];
+    var dtstart = arg[1];
+    var cal = util_1.createCalendar(courses, new Date());
 });

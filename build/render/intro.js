@@ -17,4 +17,12 @@ electron_1.ipcRenderer.on('render-courses', (evt, ...arg) => {
     console.log(courses);
     var html = tmpl.render(courses);
     course_elm.innerHTML = html;
+    var export_btn = document.createElement("button");
+    course_elm.appendChild(export_btn);
+    export_btn.innerText = "Export to iCal file";
+    export_btn.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        electron_1.ipcRenderer.send('export-courses', courses);
+        export_btn.innerText = "Exporting...";
+    });
 });
