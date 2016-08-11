@@ -1,6 +1,7 @@
 "use strict";
 const electron_1 = require("electron");
 const fs_1 = require("fs");
+const util_1 = require("./util");
 let main_wn;
 let zf_hd;
 let zf_lk = false;
@@ -58,9 +59,10 @@ electron_1.ipcMain.on('zf-redirect', function (evt, ...arg) {
     zf_hd.loadURL(link);
 });
 electron_1.ipcMain.on('zf-raw-course-data', function (evt, ...arg) {
-    var courses = arg[0];
+    var raw_courses = arg[0];
+    var _cooked = util_1.cookCourse(raw_courses);
     for (var i = 0; i < hook_courses_senders.length; ++i) {
-        hook_courses_senders[i].send('render-courses', courses);
+        hook_courses_senders[i].send('render-courses', _cooked);
     }
     zf_hd.close();
     zf_hd = null;

@@ -1,6 +1,7 @@
 import {app, BrowserWindow, ipcMain} from "electron"
 import {readFile} from "fs"
 import {RawCourseData, RawCourse} from "./course"
+import {cookCourse} from "./util"
 
 let main_wn
 let zf_hd
@@ -79,10 +80,11 @@ ipcMain.on('zf-redirect', function (evt: any, ...arg: any[]) {
 })
 
 ipcMain.on('zf-raw-course-data', function (evt: any, ...arg: any[]) {
-    var courses = <RawCourseData>arg[0]
+    var raw_courses = <RawCourseData>arg[0]
+    var _cooked = cookCourse(raw_courses);
 
     for (var i=0; i < hook_courses_senders.length; ++i) {
-        hook_courses_senders[i].send('render-courses', courses)
+        hook_courses_senders[i].send('render-courses', _cooked)
     }
 
     zf_hd.close()

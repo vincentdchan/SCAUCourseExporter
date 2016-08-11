@@ -1,15 +1,23 @@
 <template class="task-template">
     <section>
-        <h1>Please input the link of the System:</h1>
+        <h3>Please input the link of the System:</h3>
         <form>
             <input id="link_input" type="text"/>
             <button id="open_wn_btn" class="btn" type="button">Submit</button>
         </form>
+
+        <div id="course_data"></div>
     </section>
     <script id="RawCourseTemplate" type="text/x-jsrender">
-        <ul>
-            <li></li>
-        </ul>
+    <div>
+        UID: {{:uid}}
+        <br>
+        Name: {{:name}}
+        <br>
+        Teacher: {{:teacher.name}}
+        <br>
+        Location: {{:location}}
+    </div>
     </script>
     <script>
         require("../build/render/intro.js");

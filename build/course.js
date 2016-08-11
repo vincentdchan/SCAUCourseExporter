@@ -1,11 +1,5 @@
 "use strict";
 ;
-var Term;
-(function (Term) {
-    Term[Term["UP"] = 0] = "UP";
-    Term[Term["DOWN"] = 1] = "DOWN";
-})(Term || (Term = {}));
-var Day;
 (function (Day) {
     Day[Day["Monday"] = 1] = "Monday";
     Day[Day["TuesDay"] = 2] = "TuesDay";
@@ -14,11 +8,17 @@ var Day;
     Day[Day["Friday"] = 5] = "Friday";
     Day[Day["Saturday"] = 6] = "Saturday";
     Day[Day["Sunday"] = 7] = "Sunday";
-})(Day || (Day = {}));
+})(exports.Day || (exports.Day = {}));
+var Day = exports.Day;
 ;
 class Teacher {
+    constructor(_name) {
+        this.name = _name;
+    }
 }
+exports.Teacher = Teacher;
 ;
 class Course {
 }
+exports.Course = Course;
 ;

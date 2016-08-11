@@ -13,41 +13,43 @@ export interface RawCourseData {
     courses: Array<RawCourse>;
 }
 
-interface ISchoolYear {
+export interface ISchoolYear {
     from: number;
     to: number;
 };
 
-interface ISchoolWeek {
+export interface ISchoolWeek {
+    from: number;
+    to: number;
+    flag: number; // 0 for all weeks, 1 for single weeks, 2 for double weeks
+}
+
+export interface ICourseNumber {
     from: number;
     to: number;
 }
 
-interface ICourseNumber {
-    from: number;
-    to: number;
-}
-
-enum Term {
-    UP, DOWN
-}
-
-enum Day {
+export enum Day {
     Monday = 1, TuesDay, Wednesday,
     ThursDay, Friday, Saturday, Sunday
 };
 
-class Teacher {
+export class Teacher {
     name: string
+
+    constructor ( _name: string) {
+        this.name = _name;
+    }
 };
 
-class Course {
-    uid: string;
+export class Course {
+    uid: number;
     name: string;
     schoolYear: ISchoolYear;
-    term: Term;
+    term: number;
     teacher: Teacher;
     schoolWeeks: ISchoolWeek;
     courseNumber: ICourseNumber;
+    location: string;
     day: Day;
 };
