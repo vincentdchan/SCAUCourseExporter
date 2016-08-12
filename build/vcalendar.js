@@ -1,6 +1,6 @@
 "use strict";
 var DEFAULT_VERSION = "2.0";
-var DEFAULT_PRODID = "-//hacksw/handcal//NONSGML v1.0//EN";
+var DEFAULT_PRODID = "-//TypeScript/Node.js//SCAU Course Exporter v1.0//CN";
 class VCalendar {
     constructor() {
         this.version = DEFAULT_VERSION;

@@ -113,10 +113,12 @@ export function createCalendar(courses: Array<Course>, startDate: Date, dtstamp?
             _end.setMilliseconds(0);
 
             if (dtstamp) _evt.dtstamp = new Value(dtstamp);
-            _evt.uid = new Value("course#" + course.uid.toString() + "#" + week.toString())
+            _evt.uid = new Value("course#" + 
+                    course.schoolYear.from.toString() + "#" +
+                    course.uid.toString() + "#" + 
+                    week.toString())
             _evt.summary = new Value(course.name + 
-            " " + course.teacher.name +
-            " " + course.location);
+            " (" + course.teacher.name + ")");
             _evt.location = new Value(course.location);
             _evt.dtstart = new Value(_start);
             _evt.dtend = new Value(_end);

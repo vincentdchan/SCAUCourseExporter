@@ -13,8 +13,6 @@ function createWindow() {
 
     main_wn.loadURL(`file://${__dirname}/../views/index.html`);
 
-    main_wn.webContents.openDevTools();
-
     main_wn.on('closed', () => {
         main_wn = null;
     });
@@ -111,7 +109,7 @@ ipcMain.on('export-courses', (evt: any, ...arg: any[]) => {
     var iter = calendarGen(cal)
 
 
-    fs.open("output.ical", "w", (err: Error, fd: number) => {
+    fs.open("output.ics", "w", (err: Error, fd: number) => {
 
         function _fuck() {
             var buf = iter.next()

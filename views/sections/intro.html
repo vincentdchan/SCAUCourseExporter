@@ -1,39 +1,35 @@
 <template class="task-template">
     <section>
-        <h3>Please input the link of the System:</h3>
+        <h3>请输入正方系统的网址：</h3>
         <form>
             <input id="link_input" type="text"/>
-            <button id="open_wn_btn" class="btn" type="button">Submit</button>
+            <button id="open_wn_btn" class="btn" type="button">确认进入</button>
         </form>
 
         <div id="course_data"></div>
 
-        <div>
-            <p>Input the first Mondy of this term</p>
-            <div>
-                <div>
-                    <label>Year:</label>
-                    <input id="input-year" type="text" />
-                </div>
-                <div>
-                    <label>Month:</label>
-                    <input id="input-month" type="text" />
-                </div>
-                <div>
-                    <label>Day:</label>
-                    <input id="input-day" type="text" />
-                </div>
-            </div>
-            <button type="button">Export</button>
-        </div>
     </section>
     <script id="RawCourseTemplate" type="text/x-jsrender">
     <div>
-        <p>UID: {{:uid}}</p>
-        <p>Name: {{:name}}</p>
-        <p>Teacher: {{:teacher.name}}</p>
-        <p>Location: {{:location}}</p>
+        <p>
+            <b>课程名称</b>: {{:name}}
+            <br>
+            <b>老师</b>: {{:teacher.name}}
+            <br>
+            <b>上课地点</b>: {{:location}}
+            <br>
+            <b>时间信息</b>: {{:timeinfo}}
+        </p>
     </div>
+    </script>
+
+    <script id="DateInputTemplate">
+        <div>
+            <div>
+                <label>请输入这个学期第一周星期一的日期</label>
+                <input id="input-date" type="date" value="2016-08-29" />
+            </div>
+        </div>
     </script>
 
     <script>

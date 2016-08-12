@@ -39,6 +39,8 @@ function iCalGen(obj: any): Array<string> {
         result.push("DTSTAMP:" + genDate(_evt.dtstamp.content));
         if (_evt.organizer)
             result.push("ORGANIZER:" + _evt.organizer.content)
+        if (_evt.location)
+            result.push("LOCATION:" + _evt.location.content);
         result.push("DTSTART:" + genDate(_evt.dtstart.content));
         result.push("DTEND:" + genDate(_evt.dtend.content));
         result.push("SUMMARY:" + _evt.summary.content);

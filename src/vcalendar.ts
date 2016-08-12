@@ -1,7 +1,7 @@
 import {IVEvent, VEvent} from "./vevent"
 
 var DEFAULT_VERSION = "2.0";
-var DEFAULT_PRODID = "-//hacksw/handcal//NONSGML v1.0//EN"
+var DEFAULT_PRODID = "-//TypeScript/Node.js//SCAU Course Exporter v1.0//CN"
 
 export interface IVCalendar {
     events: Array<IVEvent>;

@@ -9,7 +9,6 @@ let zf_lk = false;
 function createWindow() {
     main_wn = new electron_1.BrowserWindow({ width: 800, height: 600 });
     main_wn.loadURL(`file://${__dirname}/../views/index.html`);
-    main_wn.webContents.openDevTools();
     main_wn.on('closed', () => {
         main_wn = null;
     });
@@ -84,7 +83,7 @@ electron_1.ipcMain.on('export-courses', (evt, ...arg) => {
         start = new Date(arg[1]);
     var cal = util_1.createCalendar(courses, start);
     var iter = icalgen_1.calendarGen(cal);
-    fs.open("output.ical", "w", (err, fd) => {
+    fs.open("output.ics", "w", (err, fd) => {
         function _fuck() {
             var buf = iter.next();
             if (buf.done) {
