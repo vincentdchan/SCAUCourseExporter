@@ -1,16 +1,9 @@
-# Course Exporter for SCAU Students
+# 正方系统（华南农业大学）课程导出工具
 
-A tool to help you export the course date from the education management 
-system(Zhengfang System) to an *iCal* file, which can be imported to 
-**Google Calendar**, **Outlook**, **iCalendar**...
+这是一个小工具来帮助你从正方系统里面导出课程成为*ics* 格式，通过这种格式，你可以把课程导入到**Google Calendar**, **Outlook**, **iCalendar**等等软件当中
 
-## Usage
+## 使用方法
 
-Download the *.exe* file from the *Release* Page.
+从 *Release* 页面下载最新版的工具，打开工具按照工具的指示去做。
 
-Then run the program, and follow the instruction
-so you can do it.
-
-# Not Yet Implemented
-
-This project is on working, it will be finish in a month. 
+ 
