@@ -42,38 +42,40 @@ function isDigit(_dat) {
         return false;
 }
 function createCalendar(courses, startDate, dtstamp) {
-    console.assert(startDate.getDay() === 1);
+    console.assert(startDate && startDate.getDay() === 1);
     if (!dtstamp)
         dtstamp = new Date();
     function eventFactory(course) {
         let result = new Array();
         const course_begin_table = {
-            1: { hour: 8, minite: 0 },
-            2: { hour: 8, minite: 50 },
-            3: { hour: 10, minite: 5 },
-            4: { hour: 10, minite: 55 },
-            5: { hour: 12, minite: 30 },
-            6: { hour: 13, minite: 20 },
-            7: { hour: 14, minite: 30 },
-            8: { hour: 15, minite: 20 },
-            9: { hour: 16, minite: 35 },
-            10: { hour: 17, minite: 25 },
-            11: { hour: 19, minite: 30 },
-            12: { hour: 20, minite: 20 },
+            1: { hour: 8, minute: 0 },
+            2: { hour: 8, minute: 50 },
+            3: { hour: 10, minute: 5 },
+            4: { hour: 10, minute: 55 },
+            5: { hour: 12, minute: 30 },
+            6: { hour: 13, minute: 20 },
+            7: { hour: 14, minute: 30 },
+            8: { hour: 15, minute: 20 },
+            9: { hour: 16, minute: 35 },
+            10: { hour: 17, minute: 25 },
+            11: { hour: 19, minute: 30 },
+            12: { hour: 20, minute: 20 },
+            13: { hour: 21, minute: 10 },
         };
         const course_end_table = {
-            1: { hour: 8, minite: 40 },
-            2: { hour: 9, minite: 35 },
-            3: { hour: 10, minite: 45 },
-            4: { hour: 11, minite: 35 },
-            5: { hour: 13, minite: 10 },
-            6: { hour: 14, minite: 0 },
-            7: { hour: 15, minite: 10 },
-            8: { hour: 16, minite: 5 },
-            9: { hour: 17, minite: 15 },
-            10: { hour: 18, minite: 10 },
-            11: { hour: 20, minite: 10 },
-            13: { hour: 21, minite: 35 },
+            1: { hour: 8, minute: 45 },
+            2: { hour: 9, minute: 35 },
+            3: { hour: 10, minute: 50 },
+            4: { hour: 11, minute: 40 },
+            5: { hour: 13, minute: 15 },
+            6: { hour: 14, minute: 5 },
+            7: { hour: 15, minute: 15 },
+            8: { hour: 16, minute: 5 },
+            9: { hour: 17, minute: 20 },
+            10: { hour: 18, minute: 10 },
+            11: { hour: 20, minute: 15 },
+            12: { hour: 21, minute: 5 },
+            13: { hour: 21, minute: 55 },
         };
         for (var week = course.schoolWeeks["from"]; week <= course.schoolWeeks["to"]; ++week) {
             var _flag = course.schoolWeeks.flag;
@@ -95,6 +97,7 @@ function createCalendar(courses, startDate, dtstamp) {
             _end.setMilliseconds(0);
             if (dtstamp)
                 _evt.dtstamp = new Value(dtstamp);
+            _evt.uid = new Value("course#" + course.uid.toString() + "#" + week.toString());
             _evt.summary = new Value(course.name +
                 " " + course.teacher.name +
                 " " + course.location);

@@ -3,4 +3,7 @@ node_modules/
 debug/
 
 # css file
-views/style/
+# views/style/
+
+# iCal file 
+*.ical

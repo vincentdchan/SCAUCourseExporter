@@ -1,7 +1,8 @@
 import {app, BrowserWindow, ipcMain} from "electron"
-import {readFile} from "fs"
 import {RawCourseData, RawCourse, Course} from "./course"
 import {cookCourse, createCalendar} from "./util"
+import {calendarGen} from "./icalgen"
+const fs = require("fs")
 
 let main_wn
 let zf_hd
@@ -64,7 +65,7 @@ ipcMain.on('open-zf-link', function(evt: any, ...arg: any[]) {
     })
 
     content.on('did-finish-load', () => {
-        readFile(__dirname + '/render/inject.js', 'utf-8', (err: Error, data: string) => {
+        fs.readFile(__dirname + '/render/inject.js', 'utf-8', (err: Error, data: string) => {
             if (!err) {
                 content.executeJavaScript(data);
             } else
@@ -93,9 +94,43 @@ ipcMain.on('zf-raw-course-data', (evt: any, ...arg: any[]) => {
     zf_hd = null
 })
 
+var hook_export_senders = []
+
+ipcMain.on('hook-export', (evt: any, ...arg: any[]) => {
+    hook_export_senders.push(evt.sender)
+})
+
 ipcMain.on('export-courses', (evt: any, ...arg: any[]) => {
     console.assert(arg.length >= 2)
     var courses = <Array<Course>>arg[0]
-    var dtstart = <Date>arg[1]
-    var cal = createCalendar(courses, new Date())
+    var start: Date;
+    if (arg[1] instanceof Date) start = <Date>arg[1]
+    else start = new Date(arg[1])
+    var cal = createCalendar(courses, start)
+
+    var iter = calendarGen(cal)
+
+
+    fs.open("output.ical", "w", (err: Error, fd: number) => {
+
+        function _fuck() {
+            var buf = iter.next()
+            if (buf.done) {
+                fs.close(fd)
+
+                for (var i=0; i < hook_export_senders.length; ++i)
+                    hook_export_senders[i].send('export-finished')
+                return
+
+            }
+            fs.write(fd, buf.value, _fuck)
+        }
+
+
+        if (!err)
+        {
+            _fuck()
+        }
+
+    })
 })

@@ -1,26 +1,48 @@
-import {VEvent, IVEvent} from "./vevent"
+import {VEvent} from "./vevent"
 import {VCalendar} from "./vcalendar"
 import {CRLF, SPACE} from "./util"
+import {Buffer} from "buffer"
+const fs = require("fs")
 
 var ENDL = "\n";
 
 function genDate(_d: Date): string {
-    return _d.toDateString(); 
+
+    function getFixedLen(s: string, len: number): string {
+        if (s.length < len) {
+            return getFixedLen("0" + s, len)
+        } else if (s.length > len) {
+            return s.slice(0, len)
+        }
+        else return s
+    }
+
+    var result = ""
+    result += getFixedLen(_d.getUTCFullYear().toString(), 4)
+    result += getFixedLen((_d.getUTCMonth() + 1).toString(), 2)
+    result += getFixedLen(_d.getUTCDate().toString(), 2)
+    result += "T"
+    result += getFixedLen(_d.getUTCHours().toString(), 2)
+    result += getFixedLen(_d.getUTCMinutes().toString(), 2)
+    result += getFixedLen(_d.getUTCSeconds().toString(), 2)
+    result += "Z"
+    return result
 }
 
 function iCalGen(obj: any): Array<string> {
     // var result = "";
     var result = new Array<string>();
     if (obj instanceof VEvent) {
-        var _evt = <IVEvent>obj;
+        var _evt = <VEvent>obj;
         result.push("BEGIN:VEVENT");
         result.push("UID:" + _evt.uid.content);
         result.push("DTSTAMP:" + genDate(_evt.dtstamp.content));
-        result.push("ORGANIZER:" + _evt.organizer.content + ENDL)
+        if (_evt.organizer)
+            result.push("ORGANIZER:" + _evt.organizer.content)
         result.push("DTSTART:" + genDate(_evt.dtstart.content));
         result.push("DTEND:" + genDate(_evt.dtend.content));
         result.push("SUMMARY:" + _evt.summary.content);
-        result.push("END:VEVENT" + ENDL);
+        result.push("END:VEVENT");
     } else if (obj instanceof VCalendar) {
         var _cal = <VCalendar>obj;
         result.push("BEGIN:VCALENDAR");
@@ -33,8 +55,7 @@ function iCalGen(obj: any): Array<string> {
     return result;
 };
 
-function genFinal(init: Array<string>): string {
-    var result = "";
+export function* genFinal(init: Array<string>): IterableIterator<string> {
     for (var i=0; i < init.length; ++i)
     {
         var finalLine = "";
@@ -47,8 +68,8 @@ function genFinal(init: Array<string>): string {
             while (remain_len > 0)
             {
                 for (var i = 0; i < index; ++i)
-                    result += SPACE;
-                result += line.slice(0, 60);
+                    yield SPACE;
+                yield line.slice(0, 60);
                 line = line.slice(61);
                 remain_len -= 60;
                 index++;
@@ -57,11 +78,10 @@ function genFinal(init: Array<string>): string {
         }
         else
             finalLine = line;
-        result += line + CRLF;
+        yield line + CRLF;
     }
-    return result;
 }
 
-export function calendarGen(cal: VCalendar): string {
+export function calendarGen(cal: VCalendar): IterableIterator<string> {
     return genFinal(iCalGen(cal))
 }

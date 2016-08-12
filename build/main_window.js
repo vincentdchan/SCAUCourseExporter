@@ -1,7 +1,8 @@
 "use strict";
 const electron_1 = require("electron");
-const fs_1 = require("fs");
 const util_1 = require("./util");
+const icalgen_1 = require("./icalgen");
+const fs = require("fs");
 let main_wn;
 let zf_hd;
 let zf_lk = false;
@@ -45,7 +46,7 @@ electron_1.ipcMain.on('open-zf-link', function (evt, ...arg) {
         zf_lk = false;
     });
     content.on('did-finish-load', () => {
-        fs_1.readFile(__dirname + '/render/inject.js', 'utf-8', (err, data) => {
+        fs.readFile(__dirname + '/render/inject.js', 'utf-8', (err, data) => {
             if (!err) {
                 content.executeJavaScript(data);
             }
@@ -69,9 +70,33 @@ electron_1.ipcMain.on('zf-raw-course-data', (evt, ...arg) => {
     zf_hd.close();
     zf_hd = null;
 });
+var hook_export_senders = [];
+electron_1.ipcMain.on('hook-export', (evt, ...arg) => {
+    hook_export_senders.push(evt.sender);
+});
 electron_1.ipcMain.on('export-courses', (evt, ...arg) => {
     console.assert(arg.length >= 2);
     var courses = arg[0];
-    var dtstart = arg[1];
-    var cal = util_1.createCalendar(courses, new Date());
+    var start;
+    if (arg[1] instanceof Date)
+        start = arg[1];
+    else
+        start = new Date(arg[1]);
+    var cal = util_1.createCalendar(courses, start);
+    var iter = icalgen_1.calendarGen(cal);
+    fs.open("output.ical", "w", (err, fd) => {
+        function _fuck() {
+            var buf = iter.next();
+            if (buf.done) {
+                fs.close(fd);
+                for (var i = 0; i < hook_export_senders.length; ++i)
+                    hook_export_senders[i].send('export-finished');
+                return;
+            }
+            fs.write(fd, buf.value, _fuck);
+        }
+        if (!err) {
+            _fuck();
+        }
+    });
 });
